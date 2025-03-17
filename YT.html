@@ -12,13 +12,28 @@
             background-color: #f0f2f5;
         }
 
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .header h1 {
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 18px;
+            margin-top: 0;
+        }
+
         .container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             max-width: 1200px;
             margin: 0 auto;
-        
         }
 
         .card {
@@ -95,6 +110,12 @@
     </style>
 </head>
 <body>
+    <!-- Added Header Section -->
+    <div class="header">
+        <h1>YouTube Title Templates</h1>
+        <p>Click "Show more" to expand each template and "Copy Text" to use it</p>
+    </div>
+    
     <div class="container" id="cards-container"> </div>
 
     <script>
