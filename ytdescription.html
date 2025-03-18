@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube SEO Toolkit - Generate Descriptions, Tags & Hashtags</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.3/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    .result-card {
+      transition: all 0.3s ease;
+    }
+    .result-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+    .nav-tab.active {
+      border-bottom: 3px solid #4f46e5;
+      color: #4f46e5;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+  <header class="gradient-bg py-4 text-white shadow-md">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <h1 class="text-2xl font-bold">YouTube SEO Toolkit</h1>
+        <p class="text-indigo-100 text-sm">Generate SEO-optimized descriptions, tags & hashtags</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow container mx-auto py-8 px-4">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+      <div class="p-6 border-b border-gray-200">
+        <h2 class="text-xl font-semibold mb-4">Video Details</h2>
+        
+        <div class="space-y-4">
+          <div>
+            <label for="videoTitle" class="block text-sm font-medium text-gray-700 mb-1">Video Title</label>
+            <input 
+              type="text" 
+              id="videoTitle" 
+              placeholder="e.g., 10 Digital Marketing Strategies for 2024" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+          </div>
+          
+          <div>
+            <label for="mainKeyword" class="block text-sm font-medium text-gray-700 mb-1">Main Keyword</label>
+            <input 
+              type="text" 
+              id="mainKeyword" 
+              placeholder="e.g., digital marketing tips" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+          </div>
+          
+          <div>
+            <label for="videoPurpose" class="block text-sm font-medium text-gray-700 mb-1">Video Purpose</label>
+            <select 
+              id="videoPurpose" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="educational">Educational/Tutorial</option>
+              <option value="review">Product Review</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="vlog">Vlog</option>
+              <option value="howto">How-to Guide</option>
+              <option value="comparison">Comparison</option>
+            </select>
+          </div>
+          
+          <div class="pt-2">
+            <button 
+              id="generateButton" 
+              class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-md transition-colors duration-200 flex items-center justify-center"
+            >
+              <span>Generate SEO Assets</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="loadingIndicator" class="hidden p-8 text-center">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        <p class="mt-2 text-gray-600">Generating SEO assets...</p>
+      </div>
+      
+      <div id="resultsContainer" class="hidden p-6 bg-gray-50">
+        <nav class="flex space-x-4 mb-6 border-b border-gray-200">
+          <button class="nav-tab px-4 py-2 text-sm font-medium active" data-target="description">Description</button>
+          <button class="nav-tab px-4 py-2 text-sm font-medium text-gray-500" data-target="tags">Tags</button>
+          <button class="nav-tab px-4 py-2 text-sm font-medium text-gray-500" data-target="hashtags">Hashtags</button>
+        </nav>
+        
+        <div id="descriptionSection" class="space-y-4">
+          <div class="result-card bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="font-medium text-gray-800">Video Description</h3>
+              <button class="copy-btn text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                Copy Description
+              </button>
+            </div>
+            <pre id="descriptionContent" class="text-sm text-gray-600 whitespace-pre-wrap"></pre>
+          </div>
+        </div>
+        
+        <div id="tagsSection" class="hidden space-y-4">
+          <div class="result-card bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="font-medium text-gray-800">SEO Tags</h3>
+              <button class="copy-btn text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                Copy Tags
+              </button>
+            </div>
+            <div id="tagsContent" class="flex flex-wrap gap-2 text-sm text-gray-600"></div>
+          </div>
+        </div>
+        
+        <div id="hashtagsSection" class="hidden space-y-4">
+          <div class="result-card bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="font-medium text-gray-800">Hashtags</h3>
+              <button class="copy-btn text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                Copy Hashtags
+              </button>
+            </div>
+            <div id="hashtagsContent" class="flex flex-wrap gap-2 text-sm text-gray-600"></div>
+          </div>
+        </div>
+        
+        <div class="mt-6 pt-4 border-t border-gray-200">
+          <button 
+            id="generateMoreButton" 
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200"
+          >
+            Regenerate
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-gray-800 py-6 text-center text-gray-400 text-sm mt-12">
+    <p class="mb-2">Create optimized YouTube SEO assets that boost visibility and engagement</p>
+    <p>© 2025 YouTube SEO Toolkit</p>
+  </footer>
+
+  <script>
+    // DOM Elements
+    const videoTitle = document.getElementById('videoTitle');
+    const mainKeyword = document.getElementById('mainKeyword');
+    const videoPurpose = document.getElementById('videoPurpose');
+    const generateButton = document.getElementById('generateButton');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const resultsContainer = document.getElementById('resultsContainer');
+    const chatId = crypto.randomUUID();
+    
+    // System prompt for YouTube SEO assets
+    const systemPrompt = `You are a YouTube SEO expert that generates optimized descriptions, tags, and hashtags. Follow these guidelines:
+
+1. DESCRIPTION:
+- First 8 lines must be attention-grabbing and keyword-rich
+- Include 3-5 relevant hashtags at the end
+- Add timestamps if applicable
+- Include CTAs (subscribe, like, comment)
+- Keep under 5000 characters
+- Natural language, no keyword stuffing
+
+2. TAGS:
+- 15-20 tags including main keyword, related terms, and long-tail keywords
+- Order by importance (main keyword first)
+- Comma-separated list
+
+3. HASHTAGS:
+- 10-15 relevant hashtags
+- Mix of popular and niche tags
+- Start with 3-5 broad hashtags then specific ones
+
+Format response exactly like:
+##DESCRIPTION##
+[Your description here...]
+##TAGS##
+tag1, tag2, tag3
+##HASHTAGS##
+#hashtag1 #hashtag2 #hashtag3`;
+
+    // Event listeners
+    generateButton.addEventListener('click', generateAssets);
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+      tab.addEventListener('click', switchTab);
+    });
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', copyContent);
+    });
+
+    function generateAssets() {
+      const title = videoTitle.value.trim();
+      const keyword = mainKeyword.value.trim();
+      const purpose = videoPurpose.value;
+
+      if (!title || !keyword) {
+        alert('Please fill in all required fields');
+        return;
+      }
+
+      loadingIndicator.classList.remove('hidden');
+      resultsContainer.classList.add('hidden');
+
+      const message = `Create YouTube SEO assets for video titled "${title}" about ${keyword}. Video type: ${purpose}. Include timestamps if applicable.`;
+      connectWebSocket(message);
+    }
+
+    function connectWebSocket(message) {
+      const url = "wss://backend.buildpicoapps.com/api/chatbot/chat";
+      const websocket = new WebSocket(url);
+
+      websocket.addEventListener("open", () => {
+        websocket.send(JSON.stringify({
+          chatId: chatId,
+          appId: "ahead-less",
+          systemPrompt: systemPrompt,
+          message: message,
+        }));
+      });
+
+      let responseText = "";
+      
+      websocket.onmessage = (event) => {
+        responseText += event.data;
+      };
+
+      websocket.onclose = () => {
+        loadingIndicator.classList.add('hidden');
+        processResponse(responseText);
+        resultsContainer.classList.remove('hidden');
+      };
+    }
+
+    function processResponse(response) {
+      const sections = response.split(/##(DESCRIPTION|TAGS|HASHTAGS)##/g);
+      const data = {
+        description: '',
+        tags: [],
+        hashtags: []
+      };
+
+      for (let i = 1; i < sections.length; i += 2) {
+        const sectionType = sections[i].toLowerCase();
+        const content = sections[i + 1].trim();
+        switch(sectionType) {
+          case 'description':
+            data.description = content;
+            break;
+          case 'tags':
+            data.tags = content.split(',').map(t => t.trim());
+            break;
+          case 'hashtags':
+            data.hashtags = content.split(/#+/g).filter(h => h.trim()).map(h => `#${h.trim()}`);
+            break;
+        }
+      }
+
+      document.getElementById('descriptionContent').textContent = data.description;
+      populateTags(data.tags);
+      populateHashtags(data.hashtags);
+    }
+
+    function populateTags(tags) {
+      const container = document.getElementById('tagsContent');
+      container.innerHTML = tags.map(t => `
+        <span class="bg-gray-100 px-2 py-1 rounded">${t}</span>
+      `).join('');
+    }
+
+    function populateHashtags(hashtags) {
+      const container = document.getElementById('hashtagsContent');
+      container.innerHTML = hashtags.map(h => `
+        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded">${h}</span>
+      `).join('');
+    }
+
+    function switchTab(e) {
+      const target = e.target.dataset.target;
+      document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.classList.remove('active', 'text-gray-500');
+        tab.classList.add('text-gray-500');
+      });
+      e.target.classList.add('active');
+      e.target.classList.remove('text-gray-500');
+
+      document.querySelectorAll('[id$="Section"]').forEach(section => {
+        section.classList.add('hidden');
+      });
+      document.getElementById(`${target}Section`).classList.remove('hidden');
+    }
+
+    function copyContent(e) {
+      const section = e.target.closest('[id$="Section"]').id.replace('Section', '');
+      let content = '';
+      switch(section) {
+        case 'description':
+          content = document.getElementById('descriptionContent').textContent;
+          break;
+        case 'tags':
+          content = Array.from(document.querySelectorAll('#tagsContent span')).map(s => s.textContent).join(', ');
+          break;
+        case 'hashtags':
+          content = Array.from(document.querySelectorAll('#hashtagsContent span')).map(s => s.textContent).join(' ');
+          break;
+      }
+
+      navigator.clipboard.writeText(content).then(() => {
+        const originalText = e.target.textContent;
+        e.target.textContent = 'Copied!';
+        setTimeout(() => {
+          e.target.textContent = originalText;
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
