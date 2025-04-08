@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Quote - Inspiration for Every Day</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6d98ba;
+            --background-color: #f5f7fa;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --light-accent: #e1e8f0;
+            --dark-accent: #2c3e50;
+        }
+
+        .dark-theme {
+            --primary-color: #7289da;
+            --secondary-color: #5b6eae;
+            --background-color: #2c3e50;
+            --card-color: #34495e;
+            --text-color: #f5f7fa;
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --light-accent: #4e6380;
+            --dark-accent: #1a2433;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-style: italic;
+            font-weight: 300;
+            font-size: 1.2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .quote-section {
+            background-color: var(--card-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 6px 16px var(--shadow-color);
+            text-align: center;
+            position: relative;
+        }
+
+        .quote-text {
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .quote-text.fade {
+            opacity: 0;
+        }
+
+        .quote-author {
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            margin-bottom: 2rem;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .quote-author.fade {
+            opacity: 0;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: transparent;
+            box-shadow: none;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            padding: 0.5rem;
+        }
+
+        .select-category {
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            border: 1px solid var(--light-accent);
+            background-color: var(--card-color);
+            color: var(--text-color);
+            font-size: 1rem;
+            cursor: pointer;
+            outline: none;
+            min-width: 200px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+
+        .favorite-btn {
+            background-color: transparent;
+            color: var(--text-color);
+            box-shadow: none;
+            font-size: 1.25rem;
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.5rem;
+        }
+
+        .favorite-btn.active {
+            color: gold;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .category-card {
+            background-color: var(--card-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px var(--shadow-color);
+        }
+
+        .category-card.active {
+            border: 2px solid var(--primary-color);
+        }
+
+        .category-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .favorite-quotes {
+            background-color: var(--card-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 6px 16px var(--shadow-color);
+            display: none;
+        }
+
+        .favorite-quotes h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .favorite-quote-item {
+            border-bottom: 1px solid var(--light-accent);
+            padding: 1rem 0;
+            position: relative;
+        }
+
+        .favorite-quote-item:last-child {
+            border-bottom: none;
+        }
+
+        .remove-favorite {
+            background-color: transparent;
+            color: #ff6b6b;
+            box-shadow: none;
+            font-size: 1rem;
+            position: absolute;
+            top: 0.5rem;
+            right: 0;
+            padding: 0.3rem;
+        }
+
+        @media (max-width: 768px) {
+            .quote-text {
+                font-size: 1.4rem;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .select-category {
+                width: 100%;
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            background-color: var(--dark-accent);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Daily Quote</h1>
+        <p class="tagline">Inspiration for Every Day</p>
+    </header>
+
+    <div class="container">
+        <section class="quote-section">
+            <button id="themeToggle" class="theme-toggle">🌙</button>
+            <button id="favoriteBtn" class="favorite-btn">★</button>
+            <p id="quoteText" class="quote-text">"The future belongs to those who believe in the beauty of their dreams."</p>
+            <p id="quoteAuthor" class="quote-author">— Eleanor Roosevelt</p>
+            <div class="controls">
+                <select id="categorySelect" class="select-category">
+                    <option value="all">All Categories</option>
+                    <option value="motivation">Motivation & Success</option>
+                    <option value="happiness">Happiness & Joy</option>
+                    <option value="love">Love & Relationships</option>
+                    <option value="mindfulness">Mindfulness & Inner Peace</option>
+                    <option value="perseverance">Perseverance & Resilience</option>
+                    <option value="leadership">Leadership & Influence</option>
+                    <option value="wisdom">Wisdom & Knowledge</option>
+                    <option value="creativity">Creativity & Imagination</option>
+                    <option value="growth">Growth & Self-Improvement</option>
+                    <option value="gratitude">Gratitude & Appreciation</option>
+                    <option value="courage">Courage & Bravery</option>
+                    <option value="friendship">Friendship & Connection</option>
+                    <option value="humor">Humor & Laughter</option>
+                    <option value="nature">Nature & Environment</option>
+                    <option value="adventure">Adventure & Exploration</option>
+                    <option value="kindness">Kindness & Compassion</option>
+                    <option value="simplicity">Simplicity & Minimalism</option>
+                    <option value="purpose">Purpose & Meaning</option>
+                    <option value="hope">Hope & Optimism</option>
+                    <option value="change">Change & Transformation</option>
+                </select>
+                <button id="newQuoteBtn">New Quote ↻</button>
+                <button id="showFavoritesBtn">My Favorites ♥</button>
+            </div>
+        </section>
+
+        <section id="favoritesSection" class="favorite-quotes">
+            <h2>Your Favorite Quotes</h2>
+            <div id="favoritesList"></div>
+        </section>
+
+        <h2 style="text-align: center; margin-bottom: 1.5rem;">Browse Categories</h2>
+        <section class="categories">
+            <div class="category-card" data-category="motivation">
+                <div class="category-icon">🚀</div>
+                <h3>Motivation & Success</h3>
+            </div>
+            <div class="category-card" data-category="happiness">
+                <div class="category-icon">😊</div>
+                <h3>Happiness & Joy</h3>
+            </div>
+            <div class="category-card" data-category="love">
+                <div class="category-icon">❤️</div>
+                <h3>Love & Relationships</h3>
+            </div>
+            <div class="category-card" data-category="mindfulness">
+                <div class="category-icon">🧘</div>
+                <h3>Mindfulness & Inner Peace</h3>
+            </div>
+            <div class="category-card" data-category="perseverance">
+                <div class="category-icon">💪</div>
+                <h3>Perseverance & Resilience</h3>
+            </div>
+            <div class="category-card" data-category="leadership">
+                <div class="category-icon">👑</div>
+                <h3>Leadership & Influence</h3>
+            </div>
+            <div class="category-card" data-category="wisdom">
+                <div class="category-icon">🧠</div>
+                <h3>Wisdom & Knowledge</h3>
+            </div>
+            <div class="category-card" data-category="creativity">
+                <div class="category-icon">🎨</div>
+                <h3>Creativity & Imagination</h3>
+            </div>
+            <div class="category-card" data-category="growth">
+                <div class="category-icon">🌱</div>
+                <h3>Growth & Self-Improvement</h3>
+            </div>
+            <div class="category-card" data-category="gratitude">
+                <div class="category-icon">🙏</div>
+                <h3>Gratitude & Appreciation</h3>
+            </div>
+            <div class="category-card" data-category="courage">
+                <div class="category-icon">🦁</div>
+                <h3>Courage & Bravery</h3>
+            </div>
+            <div class="category-card" data-category="friendship">
+                <div class="category-icon">👫</div>
+                <h3>Friendship & Connection</h3>
+            </div>
+            <div class="category-card" data-category="humor">
+                <div class="category-icon">😂</div>
+                <h3>Humor & Laughter</h3>
+            </div>
+            <div class="category-card" data-category="nature">
+                <div class="category-icon">🌳</div>
+                <h3>Nature & Environment</h3>
+            </div>
+            <div class="category-card" data-category="adventure">
+                <div class="category-icon">🧭</div>
+                <h3>Adventure & Exploration</h3>
+            </div>
+            <div class="category-card" data-category="kindness">
+                <div class="category-icon">💝</div>
+                <h3>Kindness & Compassion</h3>
+            </div>
+            <div class="category-card" data-category="simplicity">
+                <div class="category-icon">✨</div>
+                <h3>Simplicity & Minimalism</h3>
+            </div>
+            <div class="category-card" data-category="purpose">
+                <div class="category-icon">🎯</div>
+                <h3>Purpose & Meaning</h3>
+            </div>
+            <div class="category-card" data-category="hope">
+                <div class="category-icon">🌈</div>
+                <h3>Hope & Optimism</h3>
+            </div>
+            <div class="category-card" data-category="change">
+                <div class="category-icon">🦋</div>
+                <h3>Change & Transformation</h3>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Daily Quote App | Inspiration for Every Day</p>
+    </footer>
+
+    <script>
+        const quotes = {
+            motivation: [
+                { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+                { text: "Success is not final, failure is not fatal: It is the courage to continue that counts.", author: "Winston Churchill" },
+                { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
+                { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+                { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" }
+            ],
+            happiness: [
+                { text: "Happiness is not something ready-made. It comes from your own actions.", author: "Dalai Lama" },
+                { text: "The most wasted of all days is one without laughter.", author: "E.E. Cummings" },
+                { text: "Happiness is a warm puppy.", author: "Charles M. Schulz" },
+                { text: "The purpose of our lives is to be happy.", author: "Dalai Lama" },
+                { text: "Count your age by friends, not years. Count your life by smiles, not tears.", author: "John Lennon" }
+            ],
+            love: [
+                { text: "The best thing to hold onto in life is each other.", author: "Audrey Hepburn" },
+                { text: "Being deeply loved by someone gives you strength, while loving someone deeply gives you courage.", author: "Lao Tzu" },
+                { text: "Where there is love there is life.", author: "Mahatma Gandhi" },
+                { text: "The greatest happiness of life is the conviction that we are loved.", author: "Victor Hugo" },
+                { text: "Love is composed of a single soul inhabiting two bodies.", author: "Aristotle" }
+            ],
+            mindfulness: [
+                { text: "The present moment is the only moment available to us, and it is the door to all moments.", author: "Thich Nhat Hanh" },
+                { text: "You are the sky. Everything else is just the weather.", author: "Pema Chödrön" },
+                { text: "Peace comes from within. Do not seek it without.", author: "Buddha" },
+                { text: "Mindfulness isn't difficult, we just need to remember to do it.", author: "Sharon Salzberg" },
+                { text: "Be happy in the moment, that's enough. Each moment is all we need, not more.", author: "Mother Teresa" }
+            ],
+            perseverance: [
+                { text: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius" },
+                { text: "Fall seven times, stand up eight.", author: "Japanese Proverb" },
+                { text: "The only limit to our realization of tomorrow will be our doubts of today.", author: "Franklin D. Roosevelt" },
+                { text: "It's not that I'm so smart, it's just that I stay with problems longer.", author: "Albert Einstein" },
+                { text: "Perseverance is not a long race; it is many short races one after the other.", author: "Walter Elliot" }
+            ],
+            leadership: [
+                { text: "A leader is one who knows the way, goes the way, and shows the way.", author: "John C. Maxwell" },
+                { text: "Leadership is the capacity to translate vision into reality.", author: "Warren Bennis" },
+                { text: "The greatest leader is not necessarily the one who does the greatest things. He is the one that gets the people to do the greatest things.", author: "Ronald Reagan" },
+                { text: "Leadership is not about being in charge. It is about taking care of those in your charge.", author: "Simon Sinek" },
+                { text: "A true leader has the confidence to stand alone, the courage to make tough decisions, and the compassion to listen to the needs of others.", author: "Douglas MacArthur" }
+            ],
+            wisdom: [
+                { text: "The only true wisdom is in knowing you know nothing.", author: "Socrates" },
+                { text: "Wisdom is not a product of schooling but of the lifelong attempt to acquire it.", author: "Albert Einstein" },
+                { text: "The journey of a thousand miles begins with one step.", author: "Lao Tzu" },
+                { text: "By three methods we may learn wisdom: First, by reflection, which is noblest; Second, by imitation, which is easiest; and third by experience, which is the bitterest.", author: "Confucius" },
+                { text: "Knowledge speaks, but wisdom listens.", author: "Jimi Hendrix" }
+            ],
+            creativity: [
+                { text: "Creativity is intelligence having fun.", author: "Albert Einstein" },
+                { text: "You can't use up creativity. The more you use, the more you have.", author: "Maya Angelou" },
+                { text: "Creativity is inventing, experimenting, growing, taking risks, breaking rules, making mistakes, and having fun.", author: "Mary Lou Cook" },
+                { text: "Every child is an artist. The problem is how to remain an artist once we grow up.", author: "Pablo Picasso" },
+                { text: "The creative adult is the child who survived.", author: "Ursula K. Le Guin" }
+            ],
+            growth: [
+                { text: "What you do makes a difference, and you have to decide what kind of difference you want to make.", author: "Jane Goodall" },
+                { text: "The only person you are destined to become is the person you decide to be.", author: "Ralph Waldo Emerson" },
+                { text: "Life is growth. If we stop growing, technically and spiritually, we are as good as dead.", author: "Morihei Ueshiba" },
+                { text: "Be not afraid of growing slowly; be afraid only of standing still.", author: "Chinese Proverb" },
+                { text: "Without continual growth and progress, such words as improvement, achievement, and success have no meaning.", author: "Benjamin Franklin" }
+            ],
+            gratitude: [
+                { text: "Gratitude turns what we have into enough.", author: "Anonymous" },
+                { text: "The roots of all goodness lie in the soil of appreciation for goodness.", author: "Dalai Lama" },
+                { text: "Gratitude is the fairest blossom which springs from the soul.", author: "Henry Ward Beecher" },
+                { text: "When I started counting my blessings, my whole life turned around.", author: "Willie Nelson" },
+                { text: "Gratitude is not only the greatest of virtues, but the parent of all others.", author: "Cicero" }
+            ],
+            courage: [
+                { text: "Courage is resistance to fear, mastery of fear, not absence of fear.", author: "Mark Twain" },
+                { text: "It takes courage to grow up and become who you really are.", author: "E.E. Cummings" },
+                { text: "I learned that courage was not the absence of fear, but the triumph over it.", author: "Nelson Mandela" },
+                { text: "You will never do anything in this world without courage. It is the greatest quality of the mind next to honor.", author: "Aristotle" },
+                { text: "Life shrinks or expands in proportion to one's courage.", author: "Anais Nin" }
+            ],
+            friendship: [
+                { text: "A real friend is one who walks in when the rest of the world walks out.", author: "Walter Winchell" },
+                { text: "Friendship is born at that moment when one person says to another, 'What! You too? I thought I was the only one.'", author: "C.S. Lewis" },
+                { text: "A friend is someone who knows all about you and still loves you.", author: "Elbert Hubbard" },
+                { text: "The greatest gift of life is friendship, and I have received it.", author: "Hubert H. Humphrey" },
+                { text: "A single rose can be my garden… a single friend, my world.", author: "Leo Buscaglia" }
+            ],
+            humor: [
+                { text: "I have not failed. I've just found 10,000 ways that won't work.", author: "Thomas A. Edison" },
+                { text: "Always remember that you are absolutely unique. Just like everyone else.", author: "Margaret Mead" },
+                { text: "If you're going to be able to look back on something and laugh about it, you might as well laugh about it now.", author: "Marie Osmond" },
+                { text: "Behind every great man is a woman rolling her eyes.", author: "Jim Carrey" },
+                { text: "A day without laughter is a day wasted.", author: "Charlie Chaplin" }
+            ],
+            nature: [
+                { text: "Look deep into nature, and then you will understand everything better.", author: "Albert Einstein" },
+                { text: "In every walk with nature one receives far more than he seeks.", author: "John Muir" },
+                { text: "Nature does not hurry, yet everything is accomplished.", author: "Lao Tzu" },
+                { text: "The earth has music for those who listen.", author: "George Santayana" },
+                { text: "Study nature, love nature, stay close to nature. It will never fail you.", author: "Frank Lloyd Wright" }
+            ],
+            adventure: [
+                { text: "Life is either a daring adventure or nothing at all.", author: "Helen Keller" },
+                { text: "The biggest adventure you can take is to live the life of your dreams.", author: "Oprah Winfrey" },
+                { text: "Adventure may hurt you but monotony will kill you.", author: "Anonymous" },
+                { text: "If you think adventure is dangerous, try routine. It's lethal.", author: "Paulo Coelho" },
+                { text: "Adventure isn't hanging off a rope on the side of a mountain. Adventure is an attitude we must apply to the day-to-day obstacles of life.", author: "John Amatt" }
+            ],
+            kindness: [
+                { text: "No act of kindness, no matter how small, is ever wasted.", author: "Aesop" },
+                { text: "Kindness is a language which the deaf can hear and the blind can see.", author: "Mark Twain" },
+                { text: "Be kind whenever possible. It is always possible.", author: "Dalai Lama" },
+                { text: "Kindness in words creates confidence. Kindness in thinking creates profoundness. Kindness in giving creates love.", author: "Lao Tzu" },
+                { text: "Remember there's no such thing as a small act of kindness. Every act creates a ripple with no logical end.", author: "Scott Adams" }
+            ],
+            simplicity: [
+                { text: "Simplicity is the ultimate sophistication.", author: "Leonardo da Vinci" },
+                { text: "The ability to simplify means to eliminate the unnecessary so that the necessary may speak.", author: "Hans Hofmann" },
+                { text: "Life is really simple, but we insist on making it complicated.", author: "Confucius" },
+                { text: "In character, in manner, in style, in all things, the supreme excellence is simplicity.", author: "Henry Wadsworth Longfellow" },
+                { text: "The greatest wealth is to live content with little.", author: "Plato" }
+            ],
+            purpose: [
+                { text: "The meaning of life is to find your gift. The purpose of life is to give it away.", author: "Pablo Picasso" },
+                { text: "The purpose of life is not to be happy. It is to be useful, to be honorable, to be compassionate.", author: "Ralph Waldo Emerson" },
+                { text: "He who has a why to live for can bear almost any how.", author: "Friedrich Nietzsche" },
+                { text: "The purpose of human life is to serve and to show compassion and the will to help others.", author: "Albert Schweitzer" },
+                { text: "The mystery of human existence lies not in just staying alive, but in finding something to live for.", author: "Fyodor Dostoevsky" }
+            ],
+            hope: [
+                { text: "Hope is being able to see that there is light despite all of the darkness.", author: "Desmond Tutu" },
+                { text: "Hope is the thing with feathers that perches in the soul.", author: "Emily Dickinson" },
+                { text: "Keep your face to the sunshine and you cannot see a shadow.", author: "Helen Keller" },
+                { text: "Once you choose hope, anything's possible.", author: "Christopher Reeve" },
+                { text: "Hope is important because it can make the present moment less difficult to bear.", author: "Thich Nhat Hanh" }
+            ],
+            change: [
+                { text: "The only way to make sense out of change is to plunge into it, move with it, and join the dance.", author: "Alan Watts" },
+                { text: "Change is the law of life. And those who look only to the past or present are certain to miss the future.", author: "John F. Kennedy" },
+                { text: "If you don't like something, change it. If you can't change it, change your attitude.", author: "Maya Angelou" },
+                { text: "Everyone thinks of changing the world, but no one thinks of changing himself.", author: "Leo Tolstoy" },
+                { text: "Change is not something that we should fear. Rather, it is something that we should welcome. For without change, nothing in this world would ever grow or blossom, and no one in this world would ever move forward to become the person they're meant to be.", author: "B.K.S. Iyengar" }
+            ]
+        };
+
+        const allQuotes = Object.values(quotes).flat();
+        let currentCategory = "all";
+        let currentQuote = allQuotes[Math.floor(Math.random() * allQuotes.length)];
+        let favorites = JSON.parse(localStorage.getItem('favoriteQuotes')) || [];
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+        const quoteText = document.getElementById("quoteText");
+        const quoteAuthor = document.getElementById("quoteAuthor");
+        const categorySelect = document.getElementById("categorySelect");
+        const newQuoteBtn = document.getElementById("newQuoteBtn");
+        const themeToggle = document.getElementById("themeToggle");
+        const favoriteBtn = document.getElementById("favoriteBtn");
+        const showFavoritesBtn = document.getElementById("showFavoritesBtn");
+        const favoritesSection = document.getElementById("favoritesSection");
+        const favoritesList = document.getElementById("favoritesList");
+        const categoryCards = document.querySelectorAll(".category-card");
+
+        function updateTheme() {
+            if (isDarkMode) {
+                document.body.classList.add('dark-theme');
+                themeToggle.textContent = "☀️";
+            } else {
+                document.body.classList.remove('dark-theme');
+                themeToggle.textContent = "🌙";
+            }
+        }
+
+        function updateFavoriteButton() {
+            const isCurrentQuoteFavorite = favorites.some(
+                fav => fav.text === currentQuote.text && fav.author === currentQuote.author
+            );
+            
+            if (isCurrentQuoteFavorite) {
+                favoriteBtn.classList.add('active');
+            } else {
+                favoriteBtn.classList.remove('active');
+            }
+        }
+
+        function getRandomQuote() {
+            let quotesToChooseFrom = currentCategory === 'all' 
+                ? allQuotes 
+                : quotes[currentCategory];
+            
+            // Generate a different quote from the current one
+            let newQuote;
+            do {
+                newQuote = quotesToChooseFrom[Math.floor(Math.random() * quotesToChooseFrom.length)];
+            } while (quotesToChooseFrom.length > 1 && newQuote.text === currentQuote.text);
+            
+            return newQuote;
+        }
+
+        function updateQuote(newQuote) {
+            // Add fade out class
+            quoteText.classList.add('fade');
+            quoteAuthor.classList.add('fade');
+            
+            setTimeout(() => {
+                currentQuote = newQuote;
+                quoteText.textContent = `"${currentQuote.text}"`;
+                quoteAuthor.textContent = `— ${currentQuote.author}`;
+                updateFavoriteButton();
+                
+                // Remove fade class to fade in the new quote
+                quoteText.classList.remove('fade');
+                quoteAuthor.classList.remove('fade');
+            }, 500);
+        }
+
+        function renderFavorites() {
+            favoritesList.innerHTML = '';
+            
+            if (favorites.length === 0) {
+                favoritesList.innerHTML = '<p style="text-align: center; padding: 1rem;">You have no favorite quotes yet.</p>';
+                return;
+            }
+            
+            favorites.forEach((fav, index) => {
+                const favoriteItem = document.createElement('div');
+                favoriteItem.className = 'favorite-
+                <script>
+        // ... (quotes object and variables remain unchanged) ... 
+
+        function updateTheme() {
+            if (isDarkMode) {
+                document.body.classList.add('dark-theme');
+                themeToggle.textContent = "☀️";
+            } else {
+                document.body.classList.remove('dark-theme');
+                themeToggle.textContent = "🌙";
+            }
+        }
+
+        function updateFavoriteButton() {
+            const isCurrentQuoteFavorite = favorites.some(
+                fav => fav.text === currentQuote.text && fav.author === currentQuote.author
+            );
+            favoriteBtn.classList.toggle('active', isCurrentQuoteFavorite);
+        }
+
+        function getRandomQuote() {
+            let quotesToChooseFrom = currentCategory === 'all' 
+                ? allQuotes 
+                : quotes[currentCategory];
+            
+            if (!quotesToChooseFrom.length) return null;
+            
+            let newQuote;
+            do {
+                newQuote = quotesToChooseFrom[Math.floor(Math.random() * quotesToChooseFrom.length)];
+            } while (quotesToChooseFrom.length > 1 && newQuote.text === currentQuote.text);
+            
+            return newQuote;
+        }
+
+        function updateQuote(newQuote) {
+            quoteText.classList.add('fade');
+            quoteAuthor.classList.add('fade');
+            
+            setTimeout(() => {
+                currentQuote = newQuote;
+                quoteText.textContent = `"${currentQuote.text}"`;
+                quoteAuthor.textContent = `— ${currentQuote.author}`;
+                updateFavoriteButton();
+                
+                quoteText.classList.remove('fade');
+                quoteAuthor.classList.remove('fade');
+            }, 500);
+        }
+
+        function renderFavorites() {
+            favoritesList.innerHTML = '';
+            
+            if (favorites.length === 0) {
+                favoritesList.innerHTML = '<p style="text-align: center; padding: 1rem;">You have no favorite quotes yet.</p>';
+                return;
+            }
+            
+            favorites.forEach((fav, index) => {
+                const favoriteItem = document.createElement('div');
+                favoriteItem.className = 'favorite-quote-item';
+                favoriteItem.innerHTML = `
+                    <p class="quote-text">"${fav.text}"</p>
+                    <p class="quote-author">— ${fav.author}</p>
+                    <button class="remove-favorite" data-index="${index}">×</button>
+                `;
+                favoritesList.appendChild(favoriteItem);
+            });
+        }
+
+        // Event Listeners
+        themeToggle.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            localStorage.setItem('darkMode', isDarkMode);
+            updateTheme();
+        });
+
+        newQuoteBtn.addEventListener('click', () => {
+            const newQuote = getRandomQuote();
+            if (newQuote) updateQuote(newQuote);
+        });
+
+        favoriteBtn.addEventListener('click', () => {
+            const index = favorites.findIndex(
+                fav => fav.text === currentQuote.text && fav.author === currentQuote.author
+            );
+            
+            if (index === -1) {
+                favorites.push(currentQuote);
+            } else {
+                favorites.splice(index, 1);
+            }
+            
+            localStorage.setItem('favoriteQuotes', JSON.stringify(favorites));
+            updateFavoriteButton();
+            renderFavorites();
+        });
+
+        showFavoritesBtn.addEventListener('click', () => {
+            const isShowing = favoritesSection.style.display === 'block';
+            favoritesSection.style.display = isShowing ? 'none' : 'block';
+            showFavoritesBtn.textContent = isShowing ? 'My Favorites ♥' : 'Hide Favorites ←';
+        });
+
+        categorySelect.addEventListener('change', (e) => {
+            currentCategory = e.target.value;
+            const newQuote = getRandomQuote();
+            if (newQuote) updateQuote(newQuote);
+            
+            categoryCards.forEach(card => 
+                card.classList.remove('active')
+            );
+        });
+
+        categoryCards.forEach(card => {
+            card.addEventListener('click', () => {
+                currentCategory = card.dataset.category;
+                categorySelect.value = currentCategory;
+                categoryCards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                
+                const newQuote = getRandomQuote();
+                if (newQuote) updateQuote(newQuote);
+            });
+        });
+
+        favoritesList.addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove-favorite')) {
+                const index = e.target.dataset.index;
+                favorites.splice(index, 1);
+                localStorage.setItem('favoriteQuotes', JSON.stringify(favorites));
+                renderFavorites();
+                updateFavoriteButton();
+            }
+        });
+
+        // Initial setup
+        updateTheme();
+        renderFavorites();
+        updateFavoriteButton();
+    </script>
+</body>
+</html>
