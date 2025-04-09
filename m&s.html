@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 Motivational Quotes</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: ;
+            --text-color: #2c3e50;
+            --card-color: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: blue;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 30px;
+            font-size: 1.1rem;
+            outline: none;
+        }
+
+        .quotes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .quote-card {
+            background-color: var(--card-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .quote-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px var(--shadow-color);
+        }
+
+        .quote-text {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .quote-author {
+            font-style: italic;
+            color: var(--secondary-color);
+            text-align: right;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            display: none;
+        }
+
+        .category-filter {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            border: 2px solid var(--secondary-color);
+            background-color: transparent;
+            cursor: pointer;
+        }
+
+        .filter-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .quotes-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>100 Motivation & Success Quotes</h1>
+            <p>Click any quote to copy it</p>
+        </div>
+
+        <input type="text" class="search-bar" placeholder="Search quotes...">
+
+        <div class="quotes-container"></div>
+        
+        <div class="toast">Copied to clipboard!</div>
+    </div>
+
+    <script>
+       const quotes = [
+    {text: "Success is the sum of small efforts repeated day in and day out when no one is watching.", author: "Unknown"},
+    {text: "The road to greatness is always under construction – embrace the detours.", author: "Unknown"},
+    {text: "Success is not final, failure is not fatal: It is the courage to continue that counts.", author: "Winston Churchill"},
+    {text: "The only way to do great work is to love what you do.", author: "Steve Jobs"},
+    {text: "Don’t wait for opportunity. Create it.", author: "Unknown"},
+    {text: "The harder you work for something, the greater you’ll feel when you achieve it.", author: "Unknown"},
+    {text: "Dream bigger. Do bigger.", author: "Unknown"},
+    {text: "Success usually comes to those who are too busy to be looking for it.", author: "Henry David Thoreau"},
+    {text: "Don’t let yesterday take up too much of today.", author: "Will Rogers"},
+    {text: "You don’t have to be great to start, but you have to start to be great.", author: "Zig Ziglar"},
+    {text: "The secret of getting ahead is getting started.", author: "Mark Twain"},
+    {text: "The best time to plant a tree was 20 years ago. The second best time is now.", author: "Chinese Proverb"},
+    {text: "Only the paranoid survive.", author: "Andy Grove"},
+    {text: "It’s not whether you get knocked down, it’s whether you get up.", author: "Vince Lombardi"},
+    {text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt"},
+    {text: "Act as if what you do makes a difference. It does.", author: "William James"},
+    {text: "What you do today can improve all your tomorrows.", author: "Ralph Marston"},
+    {text: "Don’t count the days, make the days count.", author: "Muhammad Ali"},
+    {text: "The only limit to our realization of tomorrow is our doubts of today.", author: "Franklin D. Roosevelt"},
+    {text: "Success is walking from failure to failure with no loss of enthusiasm.", author: "Winston Churchill"},
+    {text: "You are never too old to set another goal or to dream a new dream.", author: "C.S. Lewis"},
+    {text: "The way to get started is to quit talking and begin doing.", author: "Walt Disney"},
+    {text: "Opportunities don’t happen. You create them.", author: "Chris Grosser"},
+    {text: "Your time is limited, don’t waste it living someone else’s life.", author: "Steve Jobs"},
+    {text: "The mind is everything. What you think you become.", author: "Buddha"},
+    {text: "The best revenge is massive success.", author: "Frank Sinatra"},
+    {text: "People who are crazy enough to think they can change the world are the ones who do.", author: "Rob Siltanen"},
+    {text: "Don’t be afraid to give up the good to go for the great.", author: "John D. Rockefeller"},
+    {text: "I find that the harder I work, the more luck I seem to have.", author: "Thomas Jefferson"},
+    {text: "There are no shortcuts to any place worth going.", author: "Beverly Sills"},
+    {text: "Success seems to be connected with action. Successful people keep moving.", author: "Conrad Hilton"},
+    {text: "You miss 100% of the shots you don’t take.", author: "Wayne Gretzky"},
+    {text: "The only person you are destined to become is the person you decide to be.", author: "Ralph Waldo Emerson"},
+    {text: "Everything you’ve ever wanted is on the other side of fear.", author: "George Addair"},
+    {text: "The two most important days in your life are the day you are born and the day you find out why.", author: "Mark Twain"},
+    {text: "Whether you think you can or you think you can’t, you’re right.", author: "Henry Ford"},
+    {text: "The only way to achieve the impossible is to believe it is possible.", author: "Charles Kingsleigh"},
+    {text: "Success isn’t about how much money you make. It’s about the difference you make in people’s lives.", author: "Michelle Obama"},
+    {text: "The biggest risk is not taking any risk.", author: "Mark Zuckerberg"},
+    {text: "If you’re offered a seat on a rocket ship, don’t ask what seat! Just get on.", author: "Sheryl Sandberg"},
+    {text: "The difference between a successful person and others is not lack of strength or knowledge, but lack of will.", author: "Vince Lombardi"},
+    {text: "You can’t connect the dots looking forward; you can only connect them looking backward.", author: "Steve Jobs"},
+    {text: "If you want to lift yourself up, lift up someone else.", author: "Booker T. Washington"},
+    {text: "The journey of a thousand miles begins with one step.", author: "Lao Tzu"},
+    {text: "The only place where success comes before work is in the dictionary.", author: "Vidal Sassoon"},
+    {text: "Don’t be pushed by your problems. Be led by your dreams.", author: "Ralph Waldo Emerson"},
+    {text: "The best way to predict the future is to create it.", author: "Abraham Lincoln"},
+    {text: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius"},
+    {text: "The only thing standing between you and your goal is the story you keep telling yourself.", author: "Jordan Belfort"},
+    {text: "If you’re not willing to risk the unusual, you’ll have to settle for the ordinary.", author: "Jim Rohn"},
+    {text: "Success is liking yourself, liking what you do, and liking how you do it.", author: "Maya Angelou"},
+    {text: "Hustle until your haters ask if you’re hiring.", author: "Unknown"},
+    {text: "If you can dream it, you can do it.", author: "Walt Disney"},
+    {text: "Work hard in silence. Let success make the noise.", author: "Unknown"},
+    {text: "The elevator to success is out of order. You’ll have to take the stairs… one step at a time.", author: "Joe Girard"},
+    {text: "Success is no accident. It is hard work, perseverance, learning, sacrifice, and love of what you do.", author: "Pelé"},
+    {text: "The difference between ordinary and extraordinary is that little extra.", author: "Jimmy Johnson"},
+    {text: "The only thing that overcomes hard luck is hard work.", author: "Harry Golden"},
+    {text: "Don’t stop when you’re tired. Stop when you’re done.", author: "Unknown"},
+    {text: "The successful warrior is the average man with laser-like focus.", author: "Bruce Lee"},
+    {text: "There is no substitute for hard work.", author: "Thomas Edison"},
+    {text: "Success is stumbling from failure to failure with no loss of enthusiasm.", author: "Winston Churchill"},
+    {text: "The only place success comes before work is in the dictionary.", author: "Vidal Sassoon"},
+    {text: "The secret to success is to know something nobody else knows.", author: "Aristotle Onassis"},
+    {text: "I never dreamed about success. I worked for it.", author: "Estée Lauder"},
+    {text: "Success is getting what you want. Happiness is wanting what you get.", author: "Dale Carnegie"},
+    {text: "The road to success is always under construction.", author: "Lily Tomlin"},
+    {text: "Success is not in what you have, but who you are.", author: "Bo Bennett"},
+    {text: "Success is the progressive realization of a worthy goal or ideal.", author: "Earl Nightingale"},
+    {text: "The price of success is hard work, dedication to the job at hand, and determination.", author: "Vince Lombardi"},
+    {text: "Success consists of going from failure to failure without loss of enthusiasm.", author: "Winston Churchill"},
+    {text: "To succeed in life, you need two things: ignorance and confidence.", author: "Mark Twain"},
+    {text: "The first step toward success is taken when you refuse to be a captive of the environment in which you first find yourself.", author: "Mark Caine"},
+    {text: "Success is not the key to happiness. Happiness is the key to success.", author: "Albert Schweitzer"},
+    {text: "Action is the foundational key to all success.", author: "Pablo Picasso"},
+    {text: "Develop success from failures. Discouragement and failure are two of the surest stepping stones to success.", author: "Dale Carnegie"},
+    {text: "Success depends upon previous preparation, and without such preparation there is sure to be failure.", author: "Confucius"},
+    {text: "Success is where preparation and opportunity meet.", author: "Bobby Unser"},
+    {text: "The successful man will profit from his mistakes and try again in a different way.", author: "Dale Carnegie"},
+    {text: "Success is not just about making money. It’s about making a difference.", author: "Unknown"},
+    {text: "Success isn’t about being the best. It’s about always getting better.", author: "Unknown"},
+    {text: "The only thing worse than starting something and failing is not starting something.", author: "Seth Godin"},
+    {text: "Success is a state of mind. If you want success, start thinking of yourself as a success.", author: "Joyce Brothers"},
+    {text: "Success isn’t overnight. It’s when every day you get a little better than the day before.", author: "Unknown"},
+    {text: "The biggest walls are built by your mind. Take control of your thoughts.", author: "Unknown"},
+    {text: "Success is not for the chosen few, but for the few who choose.", author: "Unknown"},
+    {text: "Don’t wish it were easier. Wish you were better.", author: "Jim Rohn"},
+    {text: "The difference between who you are and who you want to be is what you do.", author: "Unknown"},
+    {text: "Success is the result of perfection, hard work, learning from failure, loyalty, and persistence.", author: "Colin Powell"},
+    {text: "Your problem isn’t the problem. Your reaction is the problem.", author: "Unknown"},
+    {text: "Successful people do what unsuccessful people are not willing to do.", author: "Jeff Olson"},
+    {text: "Success is like a snowball – it takes momentum to build.", author: "Unknown"},
+    {text: "The only thing standing between you and success is the story you keep telling yourself.", author: "Unknown"},
+    {text: "Success isn’t about having no fear. It’s about moving forward despite fear.", author: "Unknown"},
+    {text: "Successful people aren’t gifted; they just work hard, then succeed on purpose.", author: "G.K. Nielson"},
+    {text: "The more you praise and celebrate your life, the more there is in life to celebrate.", author: "Oprah Winfrey"},
+    {text: "Success is the sum of small efforts repeated day in and day out.", author: "Robert Collier"},
+    {text: "Don’t let the fear of losing be greater than the excitement of winning.", author: "Robert Kiyosaki"},
+    {text: "Success is doing ordinary things extraordinarily well.", author: "Jim Rohn"},
+    {text: "The greatest danger for most of us is not that our aim is too high and we miss it, but that it is too low and we reach it.", author: "Michelangelo"},
+    {text: "Success is not the absence of failure; it’s the persistence through failure.", author: "Aisha Tyler"},
+    {text: "If you want to achieve excellence, you can get there today. As of this second, quit doing less-than-excellent work.", author: "Thomas J. Watson"},
+    {text: "The only true wisdom is in knowing you know nothing.", author: "Socrates"},
+    {text: "Success is about creating value where none existed before.", author: "Gary Vaynerchuk"},
+    {text: "The best investment you can make is in yourself.", author: "Warren Buffett"},
+    {text: "Success is the progressive realization of predetermined, worthwhile goals.", author: "Paul J. Meyer"},
+    {text: "The only way to discover the limits of the possible is to go beyond them into the impossible.", author: "Arthur C. Clarke"},
+    {text: "Success means having the courage, the determination, and the will to become the person you believe you were meant to be.", author: "George Sheehan"},
+    {text: "The minute you settle for less than you deserve, you get even less than you settled for.", author: "Maureen Dowd"}
+];
+
+        const quotesContainer = document.querySelector('.quotes-container');
+        const searchInput = document.querySelector('.search-bar');
+        const toast = document.querySelector('.toast');
+
+        // Display all quotes
+        function displayQuotes(quotesArray) {
+            quotesContainer.innerHTML = quotesArray.map(quote => `
+                <div class="quote-card">
+                    <p class="quote-text">"${quote.text}"</p>
+                    <p class="quote-author">— ${quote.author}</p>
+                </div>
+            `).join('');
+        }
+
+        // Copy to clipboard functionality
+        quotesContainer.addEventListener('click', (e) => {
+            const quoteCard = e.target.closest('.quote-card');
+            if (quoteCard) {
+                const text = quoteCard.querySelector('.quote-text').textContent;
+                const author = quoteCard.querySelector('.quote-author').textContent;
+                const fullText = `${text}\n${author}`;
+                
+                navigator.clipboard.writeText(fullText).then(() => {
+                    toast.style.display = 'block';
+                    setTimeout(() => {
+                        toast.style.display = 'none';
+                    }, 2000);
+                });
+            }
+        });
+
+        // Search functionality
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredQuotes = quotes.filter(quote => 
+                quote.text.toLowerCase().includes(searchTerm) ||
+                quote.author.toLowerCase().includes(searchTerm)
+            );
+            displayQuotes(filteredQuotes);
+        });
+
+        // Initial display
+        displayQuotes(quotes);
+
+        // Add smooth scroll to top
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            if (scrollPosition > 500) {
+                toast.textContent = "↑ Scroll to Top";
+                toast.style.display = 'block';
+                toast.style.cursor = 'pointer';
+                toast.onclick = () => window.scrollTo({top: 0, behavior: 'smooth'});
+            } else {
+                toast.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
