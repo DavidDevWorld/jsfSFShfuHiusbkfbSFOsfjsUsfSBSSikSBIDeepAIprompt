@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 Motivational Quotes</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: ;
+            --text-color: #2c3e50;
+            --card-color: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2c3e50;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 30px;
+            font-size: 1.1rem;
+            outline: none;
+        }
+
+        .quotes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .quote-card {
+            background-color: var(--card-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .quote-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px var(--shadow-color);
+        }
+
+        .quote-text {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .quote-author {
+            font-style: italic;
+            color: var(--secondary-color);
+            text-align: right;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            display: none;
+        }
+
+        .category-filter {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            border: 2px solid var(--secondary-color);
+            background-color: transparent;
+            cursor: pointer;
+        }
+
+        .filter-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .quotes-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>100 Happiness & Joy Quotes</h1>
+            <p>Click any quote to copy it</p>
+        </div>
+
+        <input type="text" class="search-bar" placeholder="Search quotes...">
+
+        <div class="quotes-container"></div>
+        
+        <div class="toast">Copied to clipboard!</div>
+    </div>
+
+    <script>
+       const quotes = [
+    {text: "Happiness is not something ready-made. It comes from your own actions.", author: "Dalai Lama"},
+    {text: "The joy we feel has little to do with the circumstances of our lives and everything to do with where we focus our attention.", author: "Unknown"},
+    {text: "Happiness blooms where gratitude grows.", author: "Unknown"},
+    {text: "Joy is the simplest form of gratitude.", author: "Karl Barth"},
+    {text: "The purpose of our lives is to be happy.", author: "Unknown"},
+    {text: "Happiness is a warm puppy.", author: "Charles M. Schulz"},
+    {text: "Find joy in the ordinary.", author: "Unknown"},
+    {text: "Happiness is letting go of what you think your life is supposed to look like.", author: "Unknown"},
+    {text: "Joy does not simply happen to us. We have to choose joy and keep choosing it every day.", author: "Henri J.M. Nouwen"},
+    {text: "The happiness of your life depends on the quality of your thoughts.", author: "Marcus Aurelius"},
+    {text: "Happiness is not a goal... it's a by-product of a life well lived.", author: "Eleanor Roosevelt"},
+    {text: "Joy is the echo of God’s life within us.", author: "Abbé Henri de Tourville"},
+    {text: "There is no path to happiness: happiness is the path.", author: "Gautama Buddha"},
+    {text: "Happiness is a direction, not a place.", author: "Sydney J. Harris"},
+    {text: "Joy grows when shared.", author: "Unknown"},
+    {text: "The secret of happiness is freedom. The secret of freedom is courage.", author: "Thucydides"},
+    {text: "Happiness often sneaks in through a door you didn’t know you left open.", author: "John Barrymore"},
+    {text: "Joy is the infallible sign of the presence of God.", author: "Pierre Teilhard de Chardin"},
+    {text: "For every minute you are angry, you lose sixty seconds of happiness.", author: "Ralph Waldo Emerson"},
+    {text: "Happiness depends upon ourselves.", author: "Aristotle"},
+    {text: "Joy is what happens to us when we allow ourselves to recognize how good things really are.", author: "Marianne Williamson"},
+    {text: "The best way to cheer yourself is to try to cheer someone else up.", author: "Mark Twain"},
+    {text: "Happiness is a choice that requires effort at times.", author: "Unknown"},
+    {text: "Joy is the holy fire that keeps our purpose warm and our intelligence aglow.", author: "Helen Keller"},
+    {text: "There is no joy without gratitude.", author: "Brené Brown"},
+    {text: "Happiness is the art of never holding in your mind the memory of any unpleasant thing that has passed.", author: "Unknown"},
+    {text: "Joy is the oxygen of the soul.", author: "Unknown"},
+    {text: "The more you praise and celebrate your life, the more there is in life to celebrate.", author: "Oprah Winfrey"},
+    {text: "Happiness is not the absence of problems, but the ability to deal with them.", author: "Unknown"},
+    {text: "Joy is the best makeup.", author: "Anne Lamott"},
+    {text: "Happiness is a perfume you cannot pour on others without getting a few drops on yourself.", author: "Ralph Waldo Emerson"},
+    {text: "The joy we give to others is contagious; it comes back to us.", author: "Unknown"},
+    {text: "Happiness is when what you think, what you say, and what you do are in harmony.", author: "Mahatma Gandhi"},
+    {text: "Joy is the flag you fly when the Prince of Peace is in residence within your heart.", author: "Unknown"},
+    {text: "The greatest happiness you can have is knowing that you do not necessarily require happiness.", author: "William Saroyan"},
+    {text: "Happiness is a warm blanket and a good book.", author: "Unknown"},
+    {text: "Joy is the settled assurance that God is in control.", author: "Unknown"},
+    {text: "Happiness consists in getting enough sleep.", author: "Robert A. Heinlein"},
+    {text: "Joy is the simplest form of rebellion.", author: "Unknown"},
+    {text: "The key to happiness is letting each situation be what it is instead of what you think it should be.", author: "Unknown"},
+    {text: "Happiness is the consequence of personal effort.", author: "Elizabeth Gilbert"},
+    {text: "Joy is the revelation of your soul’s truth.", author: "Unknown"},
+    {text: "Happiness is not a station you arrive at, but a manner of traveling.", author: "Margaret Lee Runbeck"},
+    {text: "Joy is the sound of the soul dancing.", author: "Unknown"},
+    {text: "The happiest people don’t have the best of everything, they make the best of everything.", author: "Unknown"},
+    {text: "Happiness is a butterfly, which when pursued, is always just beyond your grasp, but which, if you will sit down quietly, may alight upon you.", author: "Nathaniel Hawthorne"},
+    {text: "Joy is increased by spreading it to others.", author: "Robert Murray M'Cheyne"},
+    {text: "Happiness is the absence of the striving for happiness.", author: "Zhuangzi"},
+    {text: "Joy lies in the fight, in the attempt, in the suffering involved, not in the victory itself.", author: "Mahatma Gandhi"},
+    {text: "Happiness is a state of activity.", author: "Aristotle"},
+    {text: "Joy is the energy of love.", author: "Sarah Ban Breathnach"},
+    {text: "Happiness is a place between too much and too little.", author: "Finnish Proverb"},
+    {text: "Joy is the music of a grateful heart.", author: "Unknown"},
+    {text: "Happiness is letting yourself be perfectly OK with 'now'.", author: "Unknown"},
+    {text: "Joy is the child of simplicity and gratitude.", author: "Unknown"},
+    {text: "Happiness is not in having or being—it’s in the doing.", author: "Unknown"},
+    {text: "Joy is the sunrise that follows life’s darkest nights.", author: "Unknown"},
+    {text: "Happiness is the only good. The time to be happy is now.", author: "Robert G. Ingersoll"},
+    {text: "Joy is the quiet confidence that tomorrow will take care of itself.", author: "Unknown"},
+    {text: "Happiness is a sunbeam which may pass you by, but joy is a ray that abides in your heart.", author: "Unknown"},
+    {text: "Joy is the echo of eternity in the human heart.", author: "Unknown"},
+    {text: "Happiness is a journey made lighter by the love you carry.", author: "Unknown"},
+    {text: "Joy is the surest sign of a heart at peace.", author: "Unknown"},
+    {text: "Happiness is a byproduct of helping others.", author: "Eleanor Roosevelt"},
+    {text: "Joy is the poetry of the universe made audible.", author: "Unknown"},
+    {text: "Happiness is not about getting what you want, but wanting what you have.", author: "Unknown"},
+    {text: "Joy is the unshakable certainty that you are unconditionally loved.", author: "Unknown"},
+    {text: "Happiness is a moment you choose to embrace.", author: "Unknown"},
+    {text: "Joy is the courage to celebrate life even when storms rage.", author: "Unknown"},
+    {text: "Happiness is the gentle art of noticing.", author: "Unknown"},
+    {text: "Joy is the oxygen of a life well-lived.", author: "Unknown"},
+    {text: "Happiness is a cup that overflows when shared.", author: "Unknown"},
+    {text: "Joy is the compass that points to what truly matters.", author: "Unknown"},
+    {text: "Happiness is the quiet satisfaction of a meaningful life.", author: "Unknown"},
+    {text: "Joy is the music that plays when your soul dances.", author: "Unknown"},
+    {text: "Happiness is found in the space between expectations and reality.", author: "Unknown"},
+    {text: "Joy is the fingerprint of God on your day.", author: "Unknown"},
+    {text: "Happiness is a garden that grows best in the soil of gratitude.", author: "Unknown"},
+    {text: "Joy is the courage to laugh at tomorrow today.", author: "Unknown"},
+    {text: "Happiness is the art of keeping your heart light and your mind bright.", author: "Unknown"},
+    {text: "Joy is the echo of kindness returning to you.", author: "Unknown"},
+    {text: "Happiness is a choice you make, not a prize you find.", author: "Unknown"},
+    {text: "Joy is the quiet revolution against despair.", author: "Unknown"},
+    {text: "Happiness is a melody only you can compose.", author: "Unknown"},
+    {text: "Joy is the soul’s way of saying 'I remember who I am'.", author: "Unknown"},
+    {text: "Happiness is a candle that lights a thousand others without diminishing.", author: "Unknown"},
+    {text: "Joy is the gift you give yourself when you stop comparing.", author: "Unknown"},
+    {text: "Happiness is the bridge between yesterday’s lessons and tomorrow’s hopes.", author: "Unknown"},
+    {text: "Joy is the sunrise that follows every night of doubt.", author: "Unknown"},
+    {text: "Happiness is the courage to embrace imperfection.", author: "Unknown"},
+    {text: "Joy is the song your heart sings when it stops keeping score.", author: "Unknown"},
+    {text: "Happiness is a language spoken by those who listen to their souls.", author: "Unknown"},
+    {text: "Joy is the art of finding wonder in the mundane.", author: "Unknown"},
+    {text: "Happiness is the echo of a life lived with purpose.", author: "Unknown"},
+    {text: "Joy is the quiet triumph of hope over experience.", author: "Unknown"},
+    {text: "Happiness is the freedom to be your authentic self.", author: "Unknown"},
+    {text: "Joy is the light that leaks through life’s cracks.", author: "Unknown"},
+    {text: "Happiness is the compass needle pointing to gratitude.", author: "Unknown"},
+    {text: "Joy is the dance between what is and what could be.", author: "Unknown"},
+    {text: "Happiness is the art of turning ordinary moments into extraordinary memories.", author: "Unknown"},
+    {text: "Joy is the oxygen mask you put on before helping others.", author: "Unknown"},
+    {text: "Happiness is the quiet confidence that you’re exactly where you need to be.", author: "Unknown"},
+    {text: "Joy is the music that plays when you stop resisting life.", author: "Unknown"},
+    {text: "Happiness is the gentle art of releasing what no longer serves you.", author: "Unknown"},
+    {text: "Joy is the courage to celebrate today while trusting tomorrow.", author: "Unknown"},
+    {text: "Happiness is the bridge between gratitude and possibility.", author: "Unknown"},
+    {text: "Joy is the quiet rebellion against a world of worry.", author: "Unknown"},
+    {text: "Happiness is the art of collecting moments, not things.", author: "Unknown"},
+    {text: "Joy is the sun that melts the frost of disappointment.", author: "Unknown"},
+];
+
+        const quotesContainer = document.querySelector('.quotes-container');
+        const searchInput = document.querySelector('.search-bar');
+        const toast = document.querySelector('.toast');
+
+        // Display all quotes
+        function displayQuotes(quotesArray) {
+            quotesContainer.innerHTML = quotesArray.map(quote => `
+                <div class="quote-card">
+                    <p class="quote-text">"${quote.text}"</p>
+                    <p class="quote-author">— ${quote.author}</p>
+                </div>
+            `).join('');
+        }
+
+        // Copy to clipboard functionality
+        quotesContainer.addEventListener('click', (e) => {
+            const quoteCard = e.target.closest('.quote-card');
+            if (quoteCard) {
+                const text = quoteCard.querySelector('.quote-text').textContent;
+                const author = quoteCard.querySelector('.quote-author').textContent;
+                const fullText = `${text}\n${author}`;
+                
+                navigator.clipboard.writeText(fullText).then(() => {
+                    toast.style.display = 'block';
+                    setTimeout(() => {
+                        toast.style.display = 'none';
+                    }, 2000);
+                });
+            }
+        });
+
+        // Search functionality
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredQuotes = quotes.filter(quote => 
+                quote.text.toLowerCase().includes(searchTerm) ||
+                quote.author.toLowerCase().includes(searchTerm)
+            );
+            displayQuotes(filteredQuotes);
+        });
+
+        // Initial display
+        displayQuotes(quotes);
+
+        // Add smooth scroll to top
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            if (scrollPosition > 500) {
+                toast.textContent = "↑ Scroll to Top";
+                toast.style.display = 'block';
+                toast.style.cursor = 'pointer';
+                toast.onclick = () => window.scrollTo({top: 0, behavior: 'smooth'});
+            } else {
+                toast.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
