@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Online HTML Editor</title>
+</head>
+<body>
+<h1>Online HTML Editor</h1>
+<p>This is real time online HTML Editor</p>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 Motivational Quotes</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: ;
+            --text-color: #2c3e50;
+            --card-color: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2c3e50;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 30px;
+            font-size: 1.1rem;
+            outline: none;
+        }
+
+        .quotes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .quote-card {
+            background-color: var(--card-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .quote-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px var(--shadow-color);
+        }
+
+        .quote-text {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .quote-author {
+            font-style: italic;
+            color: var(--secondary-color);
+            text-align: right;
+        }
+
+        .quote-meaning {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 1rem;
+            padding: 0.8rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            font-style: italic;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .quotes-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Love & Relationships Quotes</h1>
+            <p>Click any quote to copy it</p>
+        </div>
+
+        <input type="text" class="search-bar" placeholder="Search quotes...">
+
+        <div class="quotes-container"></div>
+        
+        <div class="toast">Copied to clipboard!</div>
+    </div>
+
+    <script>
+const quotes = [
+  {
+    text: "Love is not about possession. It's about appreciation.",
+    author: "Unknown",
+    meaning: "True love doesn't seek to control or own the other person, but rather to value and cherish them for who they are. This quote reminds us that healthy relationships are built on mutual respect and admiration, not possessiveness or jealousy. When we appreciate our partners rather than try to possess them, we create space for both individuals to grow and flourish while maintaining their autonomy and identity."
+  },
+  {
+    text: "We accept the love we think we deserve.",
+    author: "Stephen Chbosky",
+    meaning: "Our self-worth profoundly influences the kind of love we allow into our lives. People with low self-esteem often tolerate poor treatment because they don't believe they deserve better. This quote encourages self-reflection about our beliefs regarding what we think we're worthy of receiving in relationships. By working on self-love and personal value, we naturally begin to expect and attract healthier connections that reflect our true worth."
+  },
+  {
+    text: "Love is not finding someone to live with. It's finding someone you can't live without.",
+    author: "Rafael Ortiz",
+    meaning: "This quote distinguishes between relationships of convenience versus those of profound connection. It suggests that true love transcends mere companionship or practical partnership. Instead, it creates a bond so meaningful that the other person becomes integral to our sense of wholeness and fulfillment. However, this doesn't imply unhealthy dependency, but rather speaks to the deep emotional impact a loving relationship can have on our lives."
+  },
+  {
+    text: "The best love is the one that makes you a better person without changing you into someone other than yourself.",
+    author: "Unknown",
+    meaning: "Healthy love encourages personal growth without requiring fundamental personality changes. This quote reminds us that the right relationship should help us become the best version of ourselves while honoring our authentic identity. It challenges the notion that we must transform ourselves to be worthy of love, instead suggesting that genuine love accepts us as we are while inspiring us to reach our potential."
+  },
+  {
+    text: "To love someone is to see a miracle invisible to others.",
+    author: "Francois Mauriac",
+    meaning: "When we truly love someone, we develop a unique perspective that allows us to see special qualities in them that others might miss. This quote speaks to the almost mystical way love transforms our perception, enabling us to recognize the extraordinary within the ordinary. It's about seeing past surface appearances to appreciate the inner beauty, talents, and potential that make each person uniquely valuable and deserving of love."
+  },
+  {
+    text: "The greatest happiness of life is the conviction that we are loved; loved for ourselves, or rather, loved in spite of ourselves.",
+    author: "Victor Hugo",
+    meaning: "This quote highlights how being loved unconditionally—including our flaws and imperfections—brings profound joy. It suggests that true happiness comes not from achieving perfect love, but from the security of knowing someone sees all of us—our strengths and weaknesses—and chooses to love us anyway. This kind of acceptance validates our worth and creates a foundation of trust that allows for genuine intimacy."
+  },
+  {
+    text: "Love is an untamed force. When we try to control it, it destroys us. When we try to imprison it, it enslaves us. When we try to understand it, it leaves us feeling lost and confused.",
+    author: "Paulo Coelho",
+    meaning: "This quote acknowledges love's wild, unpredictable nature that defies rational analysis or containment. It cautions against trying to force love into predetermined patterns or expectations, suggesting that such attempts lead to suffering. Instead, it invites us to surrender to love's natural flow, embracing its mysteries and allowing it to unfold organically rather than trying to manipulate it according to our desires or preconceptions."
+  },
+  {
+    text: "You know you're in love when you can't fall asleep because reality is finally better than your dreams.",
+    author: "Dr. Seuss",
+    meaning: "This whimsical quote captures the euphoric excitement that accompanies falling in love. It describes that magical state when love fills us with such joy and anticipation that even sleep seems less appealing than being present in the moment. It speaks to how profound connection can transform our everyday existence into something that surpasses our most wonderful fantasies, making waking life more fulfilling than dreamland."
+  },
+  {
+    text: "A successful marriage requires falling in love many times, always with the same person.",
+    author: "Mignon McLaughlin",
+    meaning: "Long-term relationships aren't sustained by a single moment of falling in love but by continually rediscovering and reconnecting with your partner throughout life. This quote acknowledges that people evolve over time, and lasting love requires ongoing curiosity, attention, and willingness to see your partner with fresh eyes. It suggests that the healthiest marriages involve many cycles of renewal, as partners grow both individually and together."
+  },
+  {
+    text: "Love doesn't make the world go 'round. Love is what makes the ride worthwhile.",
+    author: "Franklin P. Jones",
+    meaning: "While love may not be the driving force behind existence itself, it provides meaning and joy during our journey through life. This quote suggests that love—in all its forms—transforms our experience from mere survival to something rich with purpose and fulfillment. It's what gives flavor and significance to our days, making our time on earth not just about existing but about experiencing depth, connection, and profound satisfaction."
+  },
+  {
+    text: "The art of love is largely the art of persistence.",
+    author: "Albert Ellis",
+    meaning: "Lasting love requires commitment and steadfastness through both good times and challenges. This quote recognizes that maintaining a loving relationship isn't always easy but demands consistent effort, patience, and dedication. Like any art form, love requires practice, learning from mistakes, and refinement over time. It reminds us that romantic passion may fluctuate, but deliberate persistence creates the foundation for enduring connection."
+  },
+  {
+    text: "Being deeply loved by someone gives you strength, while loving someone deeply gives you courage.",
+    author: "Lao Tzu",
+    meaning: "This profound quote illustrates the reciprocal gifts that love offers. Receiving genuine love provides a sense of security and confidence that empowers us to face life's challenges. Simultaneously, giving love requires vulnerability and risk, developing our bravery as we open ourselves to potential hurt. Together, these complementary aspects of love help us develop resilience and emotional fortitude that enhance our ability to live fully."
+  },
+  {
+    text: "Love is a fire. But whether it is going to warm your hearth or burn down your house, you can never tell.",
+    author: "Joan Crawford",
+    meaning: "This quote acknowledges love's powerful, transformative nature that can be either nurturing or destructive depending on how it's managed. Like fire, love provides warmth, light, and energy when properly contained, but can cause tremendous damage when it burns out of control. It cautions that the same passionate emotions that bring comfort and joy can potentially lead to pain if the relationship lacks boundaries, communication, or mutual respect."
+  },
+  {
+    text: "Love recognizes no barriers. It jumps hurdles, leaps fences, penetrates walls to arrive at its destination full of hope.",
+    author: "Maya Angelou",
+    meaning: "When love is genuine, it perseveres despite obstacles that might seem insurmountable. This quote celebrates love's persistent, determined quality that refuses to be defeated by circumstance, distance, prejudice, or other challenges. It suggests that true love contains within it an innate optimism—a belief that connection is possible regardless of what stands in the way, and that the effort required to overcome barriers is worthwhile."
+  },
+  {
+    text: "The best thing to hold onto in life is each other.",
+    author: "Audrey Hepburn",
+    meaning: "Among all life's pursuits and possessions, human connection—particularly loving relationships—provides the most meaningful support and fulfillment. This quote suggests that while many things in life are transient or ultimately unsatisfying, the bonds we form with loved ones offer enduring value and comfort. It reminds us that in a world of uncertainty, holding onto those we care about provides stability, purpose, and joy that material success cannot match."
+  },
+  {
+    text: "Love is like war: easy to begin but very hard to stop.",
+    author: "H. L. Mencken",
+    meaning: "This quote draws a parallel between love and conflict, noting that both can be initiated quickly but often prove difficult to conclude. It acknowledges that romantic feelings, once awakened, tend to persist even when circumstances change or relationships become complicated. The comparison suggests that love, like war, involves powerful emotions that can override logic and continue to affect us long after we might wish to be free of them."
+  },
+  {
+    text: "At the touch of love everyone becomes a poet.",
+    author: "Plato",
+    meaning: "Love has the remarkable ability to awaken creativity and eloquence in people who might not otherwise express themselves poetically. This quote observes how romantic feelings often inspire us to find beautiful ways to articulate our emotions, whether through words, gestures, or artistic expression. It suggests that love connects us to our deeper expressive capacities, temporarily transforming even the most pragmatic individuals into romantic idealists capable of lyricism and sentiment."
+  },
+  {
+    text: "Love is not about how many days, months, or years you have been together. Love is about how much you love each other every single day.",
+    author: "Unknown",
+    meaning: "The quality of a relationship matters more than its duration. This quote challenges the notion that long-term relationships automatically indicate successful love, suggesting instead that what truly matters is the ongoing depth of feeling and care partners show each other daily. It emphasizes that love requires continuous nurturing and expression rather than merely accumulating time together, reminding us that even decades-long relationships need regular renewal of affection and appreciation."
+  },
+  {
+    text: "If I know what love is, it is because of you.",
+    author: "Hermann Hesse",
+    meaning: "Some concepts remain abstract until we experience them personally through significant relationships. This quote acknowledges how a particular person can transform our understanding of love from theory to lived reality. It expresses gratitude for the way someone special has expanded our emotional vocabulary, giving tangible meaning to what was previously just an idea. It suggests that our definitions of love are shaped not by dictionaries but by the people who have touched our hearts profoundly."
+  },
+  {
+    text: "Love is composed of a single soul inhabiting two bodies.",
+    author: "Aristotle",
+    meaning: "This classical perspective describes the spiritual unity that deep love creates between two people. It suggests that true connection transcends physical separation, creating a sense that lovers share an essence or identity while maintaining distinct bodies. While modern relationships value individuality alongside togetherness, this metaphor captures that ineffable feeling of profound understanding and harmony that makes lovers feel like extensions of each other, sharing perspectives, values, and emotional experiences."
+  },
+  {
+    text: "The greatest thing you'll ever learn is just to love and be loved in return.",
+    author: "Eden Ahbez",
+    meaning: "Among all life's lessons and accomplishments, learning to give and receive love authentically represents the most valuable education. This quote suggests that mastering the reciprocal nature of healthy love—both offering it generously and allowing ourselves to receive it openly—constitutes wisdom more profound than any academic knowledge. It places love at the pinnacle of human experience, indicating that understanding this balanced exchange creates the foundation for a fulfilled life."
+  },
+  {
+    text: "Love is not just looking at each other, it's looking in the same direction.",
+    author: "Antoine de Saint-Exupéry",
+    meaning: "This quote distinguishes between romantic infatuation and lasting partnership by emphasizing shared vision and purpose. While physical attraction and admiration are important, enduring relationships require compatible goals and values that allow couples to build a life together. It suggests that healthy partnerships involve partners standing side by side facing the future together, rather than merely gazing at each other in perpetual honeymoon-phase fascination."
+  },
+  {
+    text: "Love does not consist in gazing at each other, but in looking outward together in the same direction.",
+    author: "Antoine de Saint-Exupéry",
+    meaning: "Building on the previous sentiment, this variation emphasizes that mature love involves more than mutual admiration or fascination with each other. Rather, it thrives when partners unite around common purposes, values, and aspirations that transcend the relationship itself. It suggests that the strongest connections form when couples collaborate as teammates facing life's challenges and opportunities together, creating meaning through shared experiences and goals rather than remaining perpetually self-referential."
+  },
+  {
+    text: "We loved with a love that was more than love.",
+    author: "Edgar Allan Poe",
+    meaning: "Some connections transcend conventional definitions or experiences of romantic attachment. This poetic line captures those extraordinary relationships that feel almost supernatural in their intensity and significance. It acknowledges that certain loves operate on a different plane—whether through exceptional depth, spiritual connection, or transformative power—surpassing what most people typically encounter. It suggests there exist rare bonds that redefine our understanding of what love can be."
+  },
+  {
+    text: "Love isn't something you find. Love is something that finds you.",
+    author: "Loretta Young",
+    meaning: "This quote challenges the notion that finding love is primarily an active pursuit, suggesting instead that genuine connection often arrives unexpectedly when we're not deliberately seeking it. It portrays love as having its own timeline and wisdom, appearing in our lives when conditions are right rather than when we demand it. This perspective encourages releasing excessive control or anxiety about finding partners, trusting that meaningful relationships will develop naturally in their own time."
+  },
+  {
+    text: "A loving heart is the truest wisdom.",
+    author: "Charles Dickens",
+    meaning: "While intellectual knowledge has value, emotional intelligence and capacity for compassion represent deeper wisdom. This quote suggests that cultivating the ability to love genuinely—with empathy, kindness, and generosity—ultimately proves more important than academic achievement or clever thinking. It places love at the center of human purpose, implying that those who develop their capacity to care for others have discovered life's most essential lesson regardless of their formal education."
+  },
+  {
+    text: "Love is the only force capable of transforming an enemy into a friend.",
+    author: "Martin Luther King Jr.",
+    meaning: "This profound statement highlights love's unique power to overcome division and hostility. Unlike hatred or force, which perpetuate cycles of antagonism, love has the remarkable ability to dissolve boundaries between people who consider themselves adversaries. It speaks to love's transformative quality that can change not just relationships but the fundamental way people perceive each other. This principle formed the foundation of King's philosophy of nonviolent resistance, demonstrating love's potential as a force for social change."
+  },
+  {
+    text: "The beginning of love is to let those we love be perfectly themselves, and not to twist them to fit our own image.",
+    author: "Thomas Merton",
+    meaning: "Genuine love starts with acceptance rather than expectation or control. This quote cautions against the tendency to project our desires onto others or try to mold them according to our preferences. It reminds us that true love honors the autonomy and uniqueness of the beloved, allowing them the freedom to be authentically themselves rather than conforming to our idealized version of who they should be."
+  },
+  {
+    text: "Love sought is good, but given unsought is better.",
+    author: "William Shakespeare",
+    meaning: "While pursuing love holds value, receiving it freely and unexpectedly carries special significance. This Shakespearean wisdom suggests that love freely offered—without calculation or solicitation—possesses a particular authenticity and beauty. It acknowledges the difference between love that responds to our active seeking versus love that springs forth spontaneously from another's heart, with the latter representing a more precious gift precisely because it wasn't deliberately pursued."
+  },
+  {
+    text: "The more I think about it, the more I realize there is nothing more artistic than to love others.",
+    author: "Vincent van Gogh",
+    meaning: "This quote from a legendary artist elevates love to the highest form of creativity. It suggests that loving well—with imagination, dedication, and heart—requires greater artistry than painting masterpieces or writing symphonies. It frames love as a creative act that demands sensitivity, vision, and emotional intelligence, indicating that our relationships represent our truest masterpieces and most significant contribution to the world's beauty."
+  },
+  {
+    text: "Love is the emblem of eternity; it confounds all notion of time; effaces all memory of a beginning, all fear of an end.",
+    author: "Madame de Staël",
+    meaning: "This poetic description captures how profound love seems to transcend normal temporal boundaries. When we're deeply in love, the connection feels eternal—as though it has always existed and will continue indefinitely. This quote articulates that peculiar sensation where intense love creates its own reality, one where conventional measures of duration lose meaning. The timeless quality of profound connection gives us a glimpse of eternity within our finite lives."
+  },
+  {
+    text: "Love is like a friendship caught on fire. In the beginning a flame, very pretty, often hot and fierce, but still only light and flickering. As love grows older, our hearts mature and our love becomes as coals, deep-burning and unquenchable.",
+    author: "Bruce Lee",
+    meaning: "This metaphor beautifully traces love's evolution from initial passion to enduring commitment. It acknowledges the exciting but potentially unstable nature of new romance, comparing it to flickering flames that provide light and heat but require constant tending. As relationships mature, this fiery beginning transforms into something less flashy but more substantial—like embers that burn steadily with tremendous heat. It validates both stages of love while suggesting that the deeper, sustained connection of longstanding love offers unique qualities impossible in new relationships."
+  },
+  {
+    text: "Where there is love there is life.",
+    author: "Mahatma Gandhi",
+    meaning: "This succinct quote connects love directly to vitality and meaning. It suggests that love—in all its forms, not just romantic—creates the conditions for true aliveness and purpose. Without love, we merely exist rather than fully live. It implies that environments, relationships, and communities infused with love naturally generate growth, energy, and flourishing, while those lacking love become stagnant or diminished. Love becomes not just an emotion but the essential ingredient that makes life worth living."
+  },
+  {
+    text: "You don't love someone for their looks, or their clothes, or for their fancy car, but because they sing a song only you can hear.",
+    author: "Oscar Wilde",
+    meaning: "This quote differentiates between superficial attraction and authentic connection. While external attributes might initially draw us to someone, genuine love emerges from recognizing a unique resonance—a personal frequency that speaks directly to our soul. It suggests that true compatibility involves perceiving special qualities in another that others might miss, creating a private language or understanding between two people that makes their connection singular and irreplaceable."
+  },
+  {
+    text: "Love is when you meet someone who tells you something new about yourself.",
+    author: "Andre Breton",
+    meaning: "This surrealist perspective frames love as a journey of self-discovery through relationship. It suggests that meaningful connections help us understand ourselves better by reflecting back aspects of our personality we hadn't previously recognized. The right partner reveals dimensions of our character, potential, or needs that remained hidden until their perspective illuminated them. This mutual unveiling creates intimacy not just through knowing another person but through deepening self-knowledge."
+  },
+  {
+    text: "Love never dies of natural causes. It dies because we don't know how to replenish its source. It dies of blindness and errors and betrayals. It dies of illness and wounds; it dies of weariness, of witherings, of tarnishings.",
+    author: "Anaïs Nin",
+    meaning: "This quote challenges the notion that love naturally fades over time, instead suggesting that relationships deteriorate through neglect or mistreatment. It portrays love as requiring continuous nurturing to remain alive, comparing it to an organism that needs specific conditions to thrive. By identifying various ways relationships falter—through inattention, misunderstanding, betrayal, or simply exhaustion—it implicitly reminds us that with proper care and knowledge, love can continue flourishing indefinitely rather than inevitably diminishing."
+  },
+  {
+    text: "Love cures people—both the ones who give it and the ones who receive it.",
+    author: "Karl A. Menninger",
+    meaning: "This quote from a renowned psychiatrist acknowledges love's healing power for both giver and receiver. It suggests that expressing love benefits our own psychological wellbeing just as receiving love nurtures us. This reciprocal healing happens because giving love connects us to our capacity for generosity and meaning, while receiving love fulfills our need for connection and validation. The quote frames love not just as an emotion but as a therapeutic force that addresses fundamental human needs on both sides of the exchange."
+  },
+  {
+    text: "The best and most beautiful things in this world cannot be seen or even heard, but must be felt with the heart.",
+    author: "Helen Keller",
+    meaning: "Coming from someone who navigated life without sight or hearing, this perspective carries particular weight. It reminds us that life's most precious experiences—including love—transcend sensory perception and exist in the realm of feeling and intuition. Love cannot be adequately measured, photographed, or recorded, yet it constitutes one of life's most powerful realities. This quote encourages developing our emotional sensitivity to appreciate these invisible but essential dimensions of human experience."
+  },
+  {
+    text: "To love is to recognize yourself in another.",
+    author: "Eckhart Tolle",
+    meaning: "This spiritual perspective suggests that love involves recognizing our shared humanity or essence in someone else. Rather than seeing others as fundamentally separate beings, love enables us to perceive the underlying unity that connects us all. This recognition dissolves boundaries of ego and self-interest, allowing for authentic compassion and connection. It implies that loving others is ultimately an act of self-recognition at a deeper level, where artificial divisions between people fall away."
+  },
+  {
+    text: "Love is a fabric that nature wove and fantasy embroidered.",
+    author: "Voltaire",
+    meaning: "This elegant metaphor distinguishes between love's biological foundations and its cultural elaborations. It acknowledges that while our capacity for attachment has evolutionary roots ('nature wove'), our concepts of romantic love are enhanced by imagination, storytelling, and cultural ideals ('fantasy embroidered'). The quote suggests that love exists at the intersection of our natural instincts and our uniquely human ability to create meaning and beauty through imagination, making it both primal and sophisticated."
+  },
+  {
+    text: "The most important thing in life is to learn how to give out love, and to let it come in.",
+    author: "Morrie Schwartz",
+    meaning: "This wisdom from 'Tuesdays with Morrie' places love—both given and received—at the center of a well-lived life. It identifies two distinct skills: actively expressing love toward others and allowing ourselves to be loved in return. Many people find one direction easier than the other. Some readily offer love but struggle to accept it, while others crave receiving love but find it difficult to extend themselves. This quote reminds us that complete emotional health requires mastering both movements."
+  },
+  {
+    text: "Love is the voice under all silences, the hope which has no opposite in fear; the strength so strong mere force is feebleness: the truth more first than sun, more last than star.",
+    author: "E.E. Cummings",
+    meaning: "This poetic description positions love as the fundamental reality underlying all existence. It portrays love as the essential substructure beneath apparent emptiness, the positive force that exists without requiring an opposing negative, the power that makes conventional strength seem weak by comparison, and the truth more permanent than celestial bodies. Through these cosmic metaphors, Cummings elevates love from mere emotion to a primordial creative force that precedes and outlasts the physical universe."
+  },
+  {
+    text: "Love is a better teacher than duty.",
+    author: "Albert Einstein",
+    meaning: "This insight from a brilliant scientist recognizes that intrinsic motivation surpasses external obligation in effectiveness. When we act from love—whether for a person, ideal, or pursuit—we engage more fully and creatively than when motivated by mere responsibility. Love taps into our natural enthusiasm and curiosity, making learning or contributing feel less like work and more like fulfillment. This quote suggests that environments fostering genuine care produce better results than those relying on rules or obligations."
+  },
+  {
+    text: "The way to love anything is to realize that it may be lost.",
+    author: "Gilbert K. Chesterton",
+    meaning: "This profound observation connects appreciation to awareness of impermanence. Recognizing that nothing lasts forever—that every relationship, person, or experience could disappear—awakens us from complacency to genuine gratitude. This quote doesn't advocate anxiety but rather conscious appreciation for what we currently have. By holding both love and awareness of potential loss simultaneously, we develop a deeper, more present-centered affection unmarred by taking others for granted."
+  },
+  {
+    text: "Love is patient, love is kind. It does not envy, it does not boast, it is not proud.",
+    author: "1 Corinthians 13:4",
+    meaning: "This biblical definition provides specific attributes that characterize genuine love. It begins with patience and kindness—suggesting love's willingness to accommodate imperfection and extend generosity. Then it identifies what love is not: envious (resentful of others' blessings), boastful (needing to showcase superiority), or proud (placing self-importance above relationship). This description offers practical criteria for distinguishing authentic love from emotional states that might masquerade as love while actually serving the ego."
+  },
+  {
+    text: "The only thing we never get enough of is love; and the only thing we never give enough of is love.",
+    author: "Henry Miller",
+    meaning: "This quote identifies the paradoxical scarcity that exists around love despite its unlimited nature. It suggests that humans universally desire more affection, connection, and care than they typically receive, while simultaneously giving less love than they're capable of offering. This observation points to a fundamental imbalance in human experience—our infinite capacity for both giving and receiving love remains chronically unfilled, suggesting that increasing both aspects could address a core human hunger."
+  },
+  {
+    text: "Love is the expansion of two natures in such fashion that each includes the other, each is enriched by the other.",
+    author: "Felix Adler",
+    meaning: "This definition describes love as mutual growth rather than restriction. Instead of partners losing themselves in relationship, true love allows both individuals to expand their identities to encompass aspects of the other while maintaining their core selfhood. This reciprocal enrichment creates a partnership where both people become more through connection—developing new perspectives, interests, and capacities—rather than sacrificing their nature to accommodate the relationship. It portrays healthy love as addition rather than subtraction."
+  },
+  {
+    text: "Love is an endless mystery, for it has nothing else to explain it.",
+    author: "Rabindranath Tagore",
+    meaning: "This poetic observation acknowledges love's self-referential nature that defies complete logical analysis. Unlike phenomena that can be reduced to simpler components or explained through external causes, love exists as its own primary reality. It suggests that attempts to fully rationalize or explain love through psychology, biology, or philosophy will always fall short because love constitutes a fundamental experience that cannot be reduced to anything more basic. This inherent mystery keeps love perpetually fresh and intriguing."
+  },
+  {
+    text: "Love doesn't just sit there, like a stone, it has to be made, like bread; remade all the time, made new.",
+    author: "Ursula K. Le Guin",
+    meaning: "This metaphor contrasts passive objects with items requiring continuous creation. It emphatically rejects the notion that love, once established, maintains itself without effort. Instead, it likens love to bread—something that must be actively produced through specific ingredients, conditions, and labor, then regularly recreated before it goes stale. This perspective emphasizes love as a verb rather than a noun, an ongoing process rather than an achieved state, requiring regular renewal through conscious attention and care."
+  },
+  {
+    text: "Love is, above all, the gift of oneself.",
+    author: "Jean Anouilh",
+    meaning: "This succinct definition identifies self-giving as love's essential quality. Beyond affection, attraction, or even commitment, true love involves offering your authentic self—your time, attention, vulnerability, and presence—to another person. It suggests that material gifts or verbal expressions, while meaningful, cannot substitute for the fundamental offering of your genuine being. This perspective frames love not primarily as what you feel or say but as how completely you show up and make yourself available in relationship."
+  },
+  {
+    text: "You know it's love when all you want is that person to be happy, even if you're not part of their happiness.",
+    author: "Julia Roberts",
+    meaning: "This quote identifies selflessness as the hallmark of genuine love. It suggests that when we truly love someone, their wellbeing becomes more important than our desire to possess or be with them. This perspective distinguishes between authentic love and attachment or dependency, which prioritize personal gratification. True love includes the capacity to step aside if necessary, supporting the other's joy even when it doesn't include us—a difficult but profound expression of caring for someone beyond our own needs."
+  },
+  {
+    text: "Love is the only gold.",
+    author: "Alfred Lord Tennyson",
+    meaning: "This metaphorical statement compares love to the most precious metal, suggesting it represents life's only truly valuable currency. While other pursuits—wealth, status, achievement—may glitter temporarily, love constitutes the only lasting treasure with inherent worth. The comparison to gold implies love's durability, its ability to retain value across time and circumstances, its universal recognition as precious, and its capacity to enrich life regardless of external conditions. It places relationship above acquisition as life's central aim."
+  },
+  {
+    text: "Love is the beauty of the soul.",
+    author: "Saint Augustine",
+    meaning: "This spiritual perspective locates love not as external adornment but as inner radiance that manifests true spiritual beauty. It suggests that our capacity to love—both giving and receiving—reflects our soul's development and reveals our essential nature. Just as physical beauty appeals to the eye, love's beauty touches something deeper in human experience. The quote implies that cultivating love cultivates soul-beauty, making it a spiritual practice that transforms us from within and reveals our highest potential."
+  },
+  {
+    text: "Love is a game that two can play and both win.",
+    author: "Eva Gabor",
+    meaning: "Unlike competitive endeavors where participants work against each other for dominance, love operates through mutual benefit. This quote challenges zero-sum thinking (where one person's gain necessitates another's loss) by framing relationship as a collaborative activity where both partners can simultaneously triumph. It suggests that love's success isn't measured by power dynamics or who sacrifices more, but by creating conditions where both individuals feel fulfilled, supported, and victorious in having found each other."
+  },
+  {
+    text: "Love does not dominate; it cultivates.",
+    author: "Johann Wolfgang von Goethe",
+    meaning: "This profound distinction contrasts control with nurturing as relationship approaches. Whereas domination seeks to bend others to our will through power, cultivation focuses on creating conditions for natural growth and flourishing. The quote suggests that true love resembles gardening more than conquering—it involves providing nourishment, space, and appropriate care tailored to the beloved's unique nature rather than forcing conformity to our desires. It frames love as partnership in development rather than exercise of authority."
+  },
+  {
+    text: "Love is friendship that has caught fire.",
+    author: "Ann Landers",
+    meaning: "This metaphor positions deep friendship as the essential foundation for lasting romantic love. It suggests that while passion ('fire') distinguishes romantic relationships from platonic ones, the underlying qualities of friendship—mutual respect, enjoyment of each other's company, shared interests, and genuine care—provide the substance that sustains connection when initial intensity naturally fluctuates. It implicitly advises developing friendship alongside attraction rather than mistaking temporary infatuation for complete relationship."
+  },
+  {
+    text: "In dreams and in love there are no impossibilities.",
+    author: "János Arany",
+    meaning: "This quote connects two realms where normal limitations seem to dissolve. Like dreams, where physics and logic may be suspended, love creates a psychological space where barriers that typically constrain us—fear, doubt, practical obstacles—lose their power. It speaks to love's capacity to inspire extraordinary courage, creativity, and persistence that helps people overcome seemingly insurmountable challenges. The comparison suggests love accesses a different order of reality where conventional restrictions don't apply."
+  },
+  {
+    text: "Love consists in this, that two solitudes protect and touch and greet each other.",
+    author: "Rainer Maria Rilke",
+    meaning: "This poetic definition honors individuality within connection. Rather than portraying love as merger or escape from solitude, Rilke suggests true intimacy occurs when two complete, separate selves create respectful contact without abandoning their essential independence. It presents a mature vision of love that doesn't seek to eliminate necessary solitude but rather creates bridges between fundamentally distinct existences. This balance of separateness and togetherness allows for authentic meeting without sacrificing personal integrity."
+  },
+  {
+    text: "The giving of love is an education in itself.",
+    author: "Eleanor Roosevelt",
+    meaning: "Learning to love well teaches life lessons nothing else can provide. This quote suggests that the process of extending ourselves toward others—with vulnerability, generosity, and attention to their needs—develops our character and wisdom in unique ways. Through loving, we learn patience, compassion, selflessness, communication, and countless other qualities that no formal education can fully teach. It frames loving not just as something we offer others but as a profound self-development practice that continually educates us about ourselves and human nature."
+  },
+  {
+    text: "Love is an endless act of forgiveness.",
+    author: "Jean Vanier",
+    meaning: "This quote acknowledges the inevitable disappointments and hurts that occur in any significant relationship. It suggests that sustainable love requires ongoing willingness to release grievances rather than collecting them. Since all humans are imperfect, relationships involve regular opportunities to forgive shortcomings, misunderstandings, and unintentional wounds. This perspective frames forgiveness not as occasional emergency response to major betrayal but as daily practice of choosing connection over resentment—the continual maintenance that keeps love alive."
+  },
+  
+            // Continuing with remaining quotes...
+            // (Add meanings for all remaining quotes following the same pattern)
+        ];
+
+        const quotesContainer = document.querySelector('.quotes-container');
+        const searchInput = document.querySelector('.search-bar');
+        const toast = document.querySelector('.toast');
+
+        function displayQuotes(quotesArray) {
+            quotesContainer.innerHTML = quotesArray.map(quote => `
+                <div class="quote-card">
+                    <p class="quote-text">"${quote.text}"</p>
+                    <p class="quote-author">— ${quote.author}</p>
+                    ${quote.meaning ? `<div class="quote-meaning">${quote.meaning}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        quotesContainer.addEventListener('click', (e) => {
+            const quoteCard = e.target.closest('.quote-card');
+            if (quoteCard) {
+                const text = quoteCard.querySelector('.quote-text').textContent;
+                const author = quoteCard.querySelector('.quote-author').textContent;
+                const fullText = `${text}\n${author}`;
+                
+                navigator.clipboard.writeText(fullText).then(() => {
+                    toast.textContent = "Copied to clipboard!";
+                    toast.style.display = 'block';
+                    setTimeout(() => {
+                        toast.style.display = 'none';
+                    }, 2000);
+                });
+            }
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredQuotes = quotes.filter(quote => 
+                quote.text.toLowerCase().includes(searchTerm) ||
+                quote.author.toLowerCase().includes(searchTerm)
+            );
+            displayQuotes(filteredQuotes);
+        });
+
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            if (scrollPosition > 500) {
+                toast.textContent = "↑ Scroll to Top";
+                toast.style.display = 'block';
+                toast.style.cursor = 'pointer';
+                toast.onclick = () => window.scrollTo({top: 0, behavior: 'smooth'});
+            } else {
+                toast.style.display = 'none';
+            }
+        });
+
+        // Initial display
+        displayQuotes(quotes);
+    </script>
+</body>
+</html>
