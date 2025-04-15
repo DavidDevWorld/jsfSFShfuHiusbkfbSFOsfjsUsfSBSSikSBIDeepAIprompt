@@ -1,4 +1,4 @@
-</html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +8,7 @@
         :root {
             --primary-color: #2c3e50;
             --secondary-color: #3498db;
-            --background-color: ;
+            --background-color: #f0f0f0;
             --text-color: #2c3e50;
             --card-color: #ffffff;
             --shadow-color: rgba(0, 0, 0, 0.1);
@@ -102,6 +102,7 @@
             padding: 1rem 2rem;
             border-radius: 30px;
             display: none;
+            z-index: 1000;
         }
 
         @media (max-width: 768px) {
@@ -121,13 +122,23 @@
         <input type="text" class="search-bar" placeholder="Search quotes...">
 
         <div class="quotes-container"></div>
-        
         <div class="toast">Copied to clipboard!</div>
     </div>
 
     <script>
-const mindfulnessQuotes = [
-  {
+        const quotes = [
+            // Only including first few quotes for brevity
+            {
+                text: "The present moment is the only time over which we have dominion.",
+                author: "Thích Nhất Hạnh",
+                meaning: "This quote reminds us that the past is already gone..."
+            },
+            {
+                text: "Peace comes from within. Do not seek it without.",
+                author: "Buddha",
+                meaning: "This fundamental Buddhist teaching emphasizes..."
+            },
+             {
     text: "The present moment is the only time over which we have dominion.",
     author: "Thích Nhất Hạnh",
     meaning: "This quote reminds us that the past is already gone, the future hasn't yet arrived, and the only moment we can truly experience and influence is now. By focusing our awareness on the present, we reclaim our power and ability to live fully, rather than being lost in regrets about the past or anxieties about the future. Mindfulness practice centers on developing this capacity to dwell completely in the present moment."
@@ -457,11 +468,9 @@ const mindfulnessQuotes = [
     author: "Pema Chödrön",
     meaning: "This teaching identifies avoidance of self-knowledge as a form of self-harm. While it may seem protective to look away from uncomfortable truths about ourselves, this ignorance ultimately prevents healing and growth. Mindfulness practice develops both the courage and compassion needed to turn toward all aspects of our experience—including difficult emotions, patterns, or shadows—with honest but gentle attention."
   },
-
-  
-            // Continuing with remaining quotes...
-            // (Add meanings for all remaining quotes following the same pattern)
+            // Add all remaining quotes here...
         ];
+
         const quotesContainer = document.querySelector('.quotes-container');
         const searchInput = document.querySelector('.search-bar');
         const toast = document.querySelector('.toast');
@@ -504,12 +513,12 @@ const mindfulnessQuotes = [
 
         window.addEventListener('scroll', () => {
             const scrollPosition = window.scrollY;
-            if (scrollPosition > 500) {
+            if (scrollPosition > 500 && !toast.textContent.includes("Scroll to Top")) {
                 toast.textContent = "↑ Scroll to Top";
                 toast.style.display = 'block';
                 toast.style.cursor = 'pointer';
                 toast.onclick = () => window.scrollTo({top: 0, behavior: 'smooth'});
-            } else {
+            } else if (scrollPosition <= 500) {
                 toast.style.display = 'none';
             }
         });
